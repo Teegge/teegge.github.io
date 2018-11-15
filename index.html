@@ -1,0 +1,228 @@
+<html>
+<head>
+<title>VRChat User actions</title>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<meta charset="UTF-8">
+<meta content="Check who blocked you, made by Teegge" name="description">
+</head>
+<body>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+		body{
+			background-color: #0e0024;
+		}
+		header{
+			font-size: 25px;
+			background-color: #ffffff;
+			color: #631aed;
+			padding: 20px;
+			line-height: 20px;
+		}
+		a{
+			text-decoration: none;
+			color: #975fff;
+			font-weight: 700;
+		}
+		.header{
+			max-width: 900px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		a:hover{
+			text-decoration: underline;
+		}
+		header a{
+			font-size: 16px;
+			color: #24055e;
+			float: right;
+		}
+		header span{
+			font-size: 20px;
+		}
+		section{
+			max-width: 900px;
+			margin-left: auto;
+			margin-right: auto;
+			padding: 20px;
+			color: #ffffff;
+		}
+		h1{
+			font-size: 20px;
+			margin-bottom: 20px;
+		}
+		.form{
+			margin-bottom: 80px;
+		}
+		.form:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+		ol li{
+			margin-bottom: 7px;
+			margin-left: 15px;
+		}
+		#usuario{
+			margin-top: 20px;
+			background-color: transparent;
+			border: solid 2px #975fff;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-size: 18px;
+			padding: 10px;
+			color: #975fff;
+			outline: none;
+			float: left;
+			height: 48px;
+			display: block;
+		}
+		button{
+			margin-top: 20px;
+			float: left;
+			display: block;
+			background-color: #975fff;
+			height: 48px;
+			border: solid 2px #975fff;
+			color: #ffffff;
+			padding-left: 20px;
+			padding-right: 20px;
+			color: #0e0024;
+			font-size: 20px;
+			text-transform: uppercase;
+			cursor: pointer;
+		}
+		.lista{
+			list-style: none;
+		}
+		.lista li{
+			margin-top: 25px;
+			border: solid 2px #975fff;
+			padding: 20px;
+			font-size: 22px;
+		}
+		.nav{
+			list-style: none;
+		}
+		.nav:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+		.nav li{
+			display: block;
+			float: left;
+			background-color: #975fff;
+			color: #0e0024;
+			margin-right: 14px;
+			padding: 15px;
+			font-size: 18px;
+			text-transform: uppercase;
+			cursor: pointer;
+			margin-bottom: 14px;
+		}
+		.showAvatar,.unmute{
+			display: none;
+		}
+	</style>
+	<header>
+		<div class="header">
+			<b>VRCHAT</b>
+			<span>VRChat User actions</span>
+			<a href="https://twitter.com/TeeggeVR" target="_BLANK">Made by Teegge</a>
+		</div>
+	</header>
+	<section>
+		<h1>Instructions</h1>
+		<ol>
+			<li>Access your account on the <a target="_BLANK" href="https://www.vrchat.com/login">VRChat</a></li>
+			<li>Access this <a target="_BLANK" href="https://www.vrchat.com/api/1/auth/user/playermoderated">Link</a> and copy the entire code</li>
+			<li>Paste the code on the input bellow</li>
+		</ol>
+		<div class="form">
+			<input type="text" id="usuario" placeholder="Code.."/>
+			<button>Search</button>
+		</div>
+		<ul class="nav">
+			<li class="btn all">all</li>
+			<!--<li class="btn unmute">unmute</li>-->
+			<li class="btn block">block</li>
+			<li class="btn mute">mute</li>
+			<!--<li class="btn showAvatar">showAvatar</li>-->
+			<li class="btn hideAvatar">hideAvatar</li>
+		</ul>
+		<ul class="lista" style="display:none;"></ul>
+	</section>
+
+	<script>
+		$("button").click(function() {
+			var txt   = $("#usuario").val();
+			var obj   = jQuery.parseJSON(txt);
+			var itens = [];
+			var tipo  = {};
+			for (i in obj){
+				if(!(obj[i].type in tipo)){
+					tipo[obj[i].type] = 1;
+					itens.push(obj[i].type);
+				}
+				$(".lista").append(`
+					<li class="all ${obj[i].type}">
+						NICK : ${obj[i].sourceDisplayName}<br/>
+						TIPO : ${obj[i].type}<br/>
+						DATE : ${obj[i].created}
+					</li>
+				`);
+			}
+			$(".nav").fadeIn(500);
+			$(".lista").fadeIn(500);
+		});
+		$(document).on("click",".btn.all",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','block');
+			})
+		});
+		$(document).on("click",".btn.unmute",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','none');
+				if($(this).hasClass('unmute')){
+					$(this).css('display','block');
+				}
+			})
+		});
+		$(document).on("click",".btn.block",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','none');
+				if($(this).hasClass('block')){
+					$(this).css('display','block');
+				}
+			})
+		});
+		$(document).on("click",".btn.mute",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','none');
+				if($(this).hasClass('mute')){
+					$(this).css('display','block');
+				}
+			})
+		});
+		$(document).on("click",".btn.showAvatar",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','none');
+				if($(this).hasClass('showAvatar')){
+					$(this).css('display','block');
+				}
+			})
+		});
+		$(document).on("click",".btn.hideAvatar",function(){
+			$(".lista li").each(function(){
+				$(this).css('display','none');
+				if($(this).hasClass('hideAvatar')){
+					$(this).css('display','block');
+				}
+			})
+		});
+	</script>
+</body>
+</html>
